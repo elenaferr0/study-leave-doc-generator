@@ -1,0 +1,25 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "study-leave"
+version = "0.1.0"
+description = "A Python project to generate study leave documents for university"
+authors = [
+    {name = "Elena", email = "elena.ferro@gmail.com"},
+]
+requires-python = ">=3.8"
+dependencies = [
+    "fastapi[standard]",
+    "langcodes",
+    "typst",
+    "pydantic"
+]
+
+[project.scripts]
+api = "api.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["api"]
+

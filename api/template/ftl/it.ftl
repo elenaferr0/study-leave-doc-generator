@@ -1,0 +1,14 @@
+declaration = Dichiarazione Permesso Studio per Studenti Lavoratori
+disi = Dipartimento di Ingegneria e Scienza dell'Informazione
+student-data = Si attesta che lo studente { $name } con matricola { $id } iscritto al corso di laurea in { $degree }
+lectures = Lezioni
+lecture-description = Ha partecipato in data odierna alla lezione del corso { $course }.
+exams = Esami
+exams-description = Si è presentato in data odierna
+written-exam = per sostenere l'esame scritto
+oral-exam = per sostenere l'esame orale
+for-the-course = del corso { $course }.
+office-hours = Ricevimento Studenti
+office-hours-description = Ha partecipato in data odierna a un ricevimento studenti con il professore { $professor }.
+appointed-professor = Il docente titolare
+signature-description = (firma leggibile)
