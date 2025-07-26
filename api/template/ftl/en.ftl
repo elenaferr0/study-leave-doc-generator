@@ -1,4 +1,4 @@
-declaration = Declaration for Student Worker Leave
+study-leave = Student-worker Leave
 disi = Department of Information Engineering and Computer Science
 student-data = It is hereby attested that the student { $name } with ID { $id } enrolled in the { $degree } degree program
 lectures = Lectures

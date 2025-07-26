@@ -125,7 +125,7 @@
   #align(right, date-with-city(when: date, city: city))
   #v(40pt)
 
-  #smallcaps(transl("declaration"))
+  #smallcaps(transl("study-leave"))
 
   #transl("student-data", args: (name: name, id: id, degree: degree))
 
