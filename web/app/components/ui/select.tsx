@@ -32,27 +32,55 @@ const SelectContext = React.createContext<{
   onValueChange?: (value: string, displayText: string) => void;
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
+  items: Map<string, string>;
+  registerItem: (value: string, displayText: string) => void;
 }>({
   isOpen: false,
   setIsOpen: () => {},
+  items: new Map(),
+  registerItem: () => {},
 });
 
 const Select: React.FC<SelectProps> = ({ children, onValueChange, defaultValue, value }) => {
   const [internalValue, setInternalValue] = React.useState(defaultValue || "");
   const [displayText, setDisplayText] = React.useState("");
   const [isOpen, setIsOpen] = React.useState(false);
+  const [items, setItems] = React.useState(new Map<string, string>());
 
   // Use controlled value if provided, otherwise use internal state
   const currentValue = value !== undefined ? value : internalValue;
 
-  const handleValueChange = (newValue: string, newDisplayText: string) => {
+  const registerItem = React.useCallback((itemValue: string, itemDisplayText: string) => {
+    setItems(prev => {
+      if (prev.get(itemValue) === itemDisplayText) {
+        return prev; // No change needed
+      }
+      return new Map(prev.set(itemValue, itemDisplayText));
+    });
+  }, []);
+
+  // Update display text when value changes or items are registered
+  React.useEffect(() => {
+    if (currentValue && items.has(currentValue)) {
+      const newDisplayText = items.get(currentValue) || "";
+      if (newDisplayText !== displayText) {
+        setDisplayText(newDisplayText);
+      }
+    }
+  }, [currentValue, items, displayText]);
+
+  const handleValueChange = React.useCallback((newValue: string, newDisplayText: string) => {
     if (value === undefined) {
       setInternalValue(newValue);
     }
     setDisplayText(newDisplayText);
     onValueChange?.(newValue);
     setIsOpen(false);
-  };
+  }, [value, onValueChange]);
+
+  const setIsOpenMemo = React.useCallback((open: boolean) => {
+    setIsOpen(open);
+  }, []);
 
   return (
     <SelectContext.Provider value={{ 
@@ -60,7 +88,9 @@ const Select: React.FC<SelectProps> = ({ children, onValueChange, defaultValue, 
       displayText,
       onValueChange: handleValueChange, 
       isOpen, 
-      setIsOpen 
+      setIsOpen: setIsOpenMemo,
+      items,
+      registerItem
     }}>
       <div className="relative">
         {children}
@@ -76,6 +106,7 @@ const SelectTrigger = React.forwardRef<HTMLButtonElement, SelectTriggerProps>(
     return (
       <button
         ref={ref}
+        type="button"
         className={cn(
           "flex h-10 w-full items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
           className
@@ -127,16 +158,28 @@ const SelectContent: React.FC<SelectContentProps> = ({ children }) => {
 
 const SelectItem = React.forwardRef<HTMLButtonElement, SelectItemProps>(
   ({ className, children, value, ...props }, ref) => {
-    const { onValueChange } = React.useContext(SelectContext);
+    const { onValueChange, registerItem } = React.useContext(SelectContext);
+    
+    // Register this item when component mounts
+    React.useEffect(() => {
+      const displayText = typeof children === 'string' ? children : value;
+      registerItem(value, displayText);
+    }, [value, children, registerItem]);
+    
+    const handleClick = React.useCallback(() => {
+      const displayText = typeof children === 'string' ? children : value;
+      onValueChange?.(value, displayText);
+    }, [value, children, onValueChange]);
     
     return (
       <button
         ref={ref}
+        type="button"
         className={cn(
           "w-full px-3 py-2 text-left text-sm hover:bg-gray-100 focus:bg-gray-100 focus:outline-none",
           className
         )}
-        onClick={() => onValueChange?.(value, typeof children === 'string' ? children : value)}
+        onClick={handleClick}
         {...props}
       >
         {children}
