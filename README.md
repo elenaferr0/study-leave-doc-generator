@@ -6,7 +6,7 @@ A web application that generates study leave documents for working students. For
 
 In Italy, steelworker contracts offer paid study leave to employees which are enrolled in a degree program. To receive this benefit, workers must provide a document signed by the appointed professor specifying the type of academic activity they need to attend (most commonly, exams).
 
-This application automates the generation of these documents by providing a simple web interface where users can input their details and generate properly formatted PDF documents. Information that is likely to never changed is cached in the user's browser (and it never leaves it).
+This application automates the generation of a pre-filled document by providing a simple web interface where users can input their details. Information that'll likely never change is cached in the user's browser (and it never leaves it).
 
 ## Features
 
