@@ -1,33 +1,35 @@
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import Response, JSONResponse
 from fastapi.exceptions import RequestValidationError
 from pydantic import ValidationError
 import json
 import typst as typ
 
-from .datatypes import DocumentInputs
+from .models import DocumentInputs
 
-app = FastAPI()
-
-
-@app.exception_handler(RequestValidationError)
-async def validation_exception_handler(request: Request, exc: RequestValidationError):
-    """Custom handler for validation errors"""
-    return JSONResponse(
-        status_code=422,
-        content={
-            "error": "Validation failed",
-            "message": "The request data is invalid",
-            "details": exc.errors()
-        }
-    )
+router = APIRouter()
 
 
-@app.post("/build")
+@router.get("/activity-types")
+def get_activity_types():
+    """Get available activity types."""
+    from .models.document_inputs import ActivityType
+    return {
+        "activity_types": [
+            {
+                "value": activity.value,
+                "name": activity.value.replace("-", " ").title()
+            }
+            for activity in ActivityType
+        ]
+    }
+
+
+@router.post("/build")
 def build_document(inputs: DocumentInputs):
     try:
         input_dict = inputs.model_dump(mode='json')
-        pdf_bytes = typ.compile(input="template/document.typ", sys_inputs={"inputs": json.dumps(input_dict)})
+        pdf_bytes = typ.compile(input="template/template.typ", sys_inputs={"inputs": json.dumps(input_dict)})
         
         return Response(
             content=pdf_bytes,
