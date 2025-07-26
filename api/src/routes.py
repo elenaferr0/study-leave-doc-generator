@@ -4,6 +4,7 @@ from fastapi.exceptions import RequestValidationError
 from pydantic import ValidationError
 import json
 import typst as typ
+from langcodes import Language
 
 from .models import DocumentInputs
 
@@ -23,6 +24,15 @@ def get_activity_types():
             for activity in ActivityType
         ]
     }
+
+@router.get("/supported-languages")
+def get_supported_languages():
+    """Get supported languages for document generation."""
+    languages = [
+        Language.make("it"),
+        Language.make("en"),
+    ]
+    return [{"code": lang.language, "name": lang.display_name()} for lang in languages]
 
 
 @router.post("/build")
