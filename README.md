@@ -1,12 +1,12 @@
 # Study Leave Document Generator
 
-A web application that generates official study leave documents for Italian steelworker contract holders who are entitled to paid study leave as students.
+A web application that generates study leave documents for working students. For the time being, this is generated with UniTrento's header, but might become parametric if needed.
 
 ## Context
 
-In Italy, steelworker contracts offer paid study leave to employees who are also students. To receive this benefit, workers must provide a document signed by the appointed professor specifying the type of academic activity they need to attend.
+In Italy, steelworker contracts offer paid study leave to employees which are enrolled in a degree program. To receive this benefit, workers must provide a document signed by the appointed professor specifying the type of academic activity they need to attend (most commonly, exams).
 
-This application automates the generation of these official documents by providing a simple web interface where users can input their details and generate properly formatted PDF documents.
+This application automates the generation of these documents by providing a simple web interface where users can input their details and generate properly formatted PDF documents. Information that is likely to never changed is cached in the user's browser (and it never leaves it).
 
 ## Features
 
@@ -15,10 +15,8 @@ This application automates the generation of these official documents by providi
     - Oral exams
     - Written exams
     - Office hours meetings
-
 - The document can be generated in both Italian and English
 - The document is generated in PDF format using the Typst templating system. This works by injecting parameters into a template
-
 
 ## Screenshots
 
