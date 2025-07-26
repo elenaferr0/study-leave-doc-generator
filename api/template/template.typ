@@ -65,7 +65,7 @@
   message: "Language must be provided.",
 )
 
-#let activities = ("lectures", "oral-exam", "written-exam", "office-hours")
+#let activities = ("lectures", "oral-exam", "written-exam", "office-hours-meeting")
 #assert(
   activity in activities,
   message: "Activity must be one of: " + activities.join(", "),
@@ -78,9 +78,9 @@
   if activity == "lectures" { 1 } else { 0 }
     + if activity == "oral-exam" { 1 } else { 0 }
     + if activity == "written-exam" { 1 } else { 0 }
-    + if activity == "office-hours" { 1 } else { 0 }
+    + if activity == "office-hours-meeting" { 1 } else { 0 }
     <= 1,
-  message: "At most one of lectures, oral-exam, written-exam, office-hours can be true.",
+  message: "At most one of lectures, oral-exam, written-exam, office-hours-meeting can be true.",
 )
 
 // Styling and layout
@@ -104,9 +104,12 @@
   )
 }
 
+
+#let blank = "_" * 20
+
 #let value-or-blank = value => {
   if value == none or value.len() == 0 {
-    return "_" * 20
+    return blank
   }
   return value
 }
@@ -140,7 +143,7 @@
   } else {
     [
       - [  ] *#transl("lectures")*\
-      #transl("lecture-description", args: (course: value-or-blank(course)))
+      #transl("lecture-description", args: (course: blank))
     ]
   }
 
@@ -179,19 +182,19 @@
   }
 
 
-  #transl("for-the-course", args: (course: course))
+  #transl("for-the-course", args: (course: if activity == "oral-exam" or activity == "written-exam" { value-or-blank(course) } else { blank }))
   #v(15pt)
 
 
-  #if activity == "office-hours" {
+  #if activity == "office-hours-meeting" {
     [
-      - [x] *#transl("office-hours")*\
-      #transl("office-hours-description", args: (professor: value-or-blank(professor)))
+      - [x] *#transl("office-hours-meeting")*\
+      #transl("office-hours-meeting-description", args: (professor: value-or-blank(professor)))
     ]
   } else {
     [
-      - [  ] *#transl("office-hours")*\
-      #transl("office-hours-description", args: (professor: value-or-blank(professor)))
+      - [  ] *#transl("office-hours-meeting")*\
+      #transl("office-hours-meeting-description", args: (professor: blank))
     ]
   }
 

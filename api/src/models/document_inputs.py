@@ -13,7 +13,7 @@ class ActivityType(str, Enum):
     LECTURES = "lectures"
     ORAL_EXAM = "oral-exam"
     WRITTEN_EXAM = "written-exam"
-    OFFICE_HOURS = "office-hours"
+    OFFICE_HOURS_MEETING = "office-hours-meeting"
 
 
 class DocumentInputs(BaseModel):
@@ -91,7 +91,7 @@ class DocumentInputs(BaseModel):
                     {}
                 )
             
-        elif self.activity_type == ActivityType.OFFICE_HOURS:
+        elif self.activity_type == ActivityType.OFFICE_HOURS_MEETING:
             # For office hours: professor is required, course can be empty
             if not self.professor or self.professor.strip() == "":
                 raise PydanticCustomError(
@@ -121,4 +121,4 @@ class DocumentInputs(BaseModel):
     @property
     def office_hours(self) -> bool:
         """Returns True if activity_type is office_hours"""
-        return self.activity_type == ActivityType.OFFICE_HOURS
+        return self.activity_type == ActivityType.OFFICE_HOURS_MEETING
