@@ -32,7 +32,6 @@ This application automates the generation of a pre-filled document by providing 
 - **Frontend**: React with Vite
 - **PDF Generation**: Typst templating system  
 - **Validation**: Pydantic models
-- **Styling**: Modern UI components
 
 ## API Endpoints
 
